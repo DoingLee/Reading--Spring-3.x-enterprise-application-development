@@ -1,0 +1,2 @@
+CREATE TABLE T_USER (USER_ID INT AUTO_INCREMENT,USER_NAME VARCHAR(30),credits INT,password  VARCHAR(32),last_visit datetime,last_ip  VARCHAR(23),PRIMARY KEY (`user_id`) );
+CREATE TABLE t_login_log (login_log_id  INT AUTO_INCREMENT , user_id   INT,ip  VARCHAR(23),login_datetime datetime,PRIMARY KEY (`login_log_id`) );

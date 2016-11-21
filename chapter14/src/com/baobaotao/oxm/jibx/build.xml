@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="gb2312"?>
+<project name="oxm" default="run">
+	<property name="project" value="D:/masterspring/chapter14"/>
+	<property name="src" value="D:/masterspring/chapter14/src"/>
+	<property name="lib" value="D:/masterspring/extraLib/jibx"/>
+	<property name="classes" value="D:/masterspring/chapter14/classes"/>
+	<target name="clean">
+		<delete includeEmptyDirs="true">
+			<fileset dir="${classes}" includes="**/*" defaultexcludes="no"/>
+		</delete>
+	</target>
+	<target name="init">
+		<mkdir dir="${classes}"/>
+	</target>
+	<target name="compile" depends="init"  description="test">
+		<javac destdir="${classes}" verbose="false" debug="on" deprecation="true" >
+			<src path="${src}" />
+			<classpath>
+				<pathelement location="D:/masterSpring/extraLib/ant-1.6.5.jar"/>
+				<pathelement location="${lib}/bcel.jar"/>
+				<pathelement location="${lib}/jibx-bind.jar"/>
+				<pathelement location="${lib}/jibx-extras.jar"/>
+				<pathelement location="${lib}/jibx-run.jar"/>
+				<pathelement location="${lib}/xpp3.jar"/>
+			</classpath>
+		</javac>
+		<copy todir="${classes}">
+			<fileset dir="${src}" excludes="**/*.java" />
+		</copy>
+	</target>
+	<taskdef name="bind" classname="org.jibx.binding.ant.CompileTask" classpath="${lib}/jibx-bind.jar"/>
+	<target name="jibx-binding" depends="compile">
+		<bind verbose="false" load="true" binding="${classes}/com/baobaotao/oxm/jibx/binding.xml">
+			<classpath>
+				<path location="${classes}">
+				</path>
+				<pathelement location="${lib}/jibx-bind.jar"/>
+			</classpath>
+		</bind>
+	</target>
+	<target name="run" depends="jibx-binding" description="run">
+		<java classname="com.baobaotao.oxm.jibx.JibxSample">
+			<classpath>
+				<path location="${classes}">
+				</path>
+				<pathelement location="D:/masterSpring/extraLib/ant-1.6.5.jar"/>
+				<pathelement location="${lib}/bcel.jar"/>
+				<pathelement location="${lib}/jibx-bind.jar"/>
+				<pathelement location="${lib}/jibx-extras.jar"/>
+				<pathelement location="${lib}/jibx-run.jar"/>
+				<pathelement location="${lib}/xpp3.jar"/>
+			</classpath>
+		</java>
+	</target>
+</project>

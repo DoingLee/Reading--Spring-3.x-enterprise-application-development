@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="profiler.settings.instrument.empty.methods">true</entry>
+<entry key="ProfilerCPUSettings_profile_runnables">true</entry>
+<entry key="profiler.settings.n.profiled.threads.limit">32</entry>
+<entry key="ProfilerCPUSettings_filter_type">2</entry>
+<entry key="profiler.settings.obj.alloc.stack.sampling.depth">-1</entry>
+<entry key="profiler.settings.instrument.method.invoke">true</entry>
+<entry key="profiler.settings.instr.scheme">1</entry>
+<entry key="ProfilerMemorySettings_track_every">10</entry>
+<entry key="ProfilerMemorySettings_mode">4</entry>
+<entry key="ProfilerCPUSettings_root_classes">com.baobaotao.**
+org.springframework.http.**
+org.springframework.remoting.caucho.**
+org.springframework.remoting.httpinvoker.**
+org.springframework.remoting.jaxrpc.**
+org.springframework.remoting.jaxws.**
+org.springframework.web.**
+</entry>
+<entry key="ProfilerCPUSettings_filter_value">com.baobaotao.*,&#13;
+org.springframework.http.*,&#13;
+org.springframework.remoting.caucho.*,&#13;
+org.springframework.remoting.httpinvoker.*,&#13;
+org.springframework.remoting.jaxrpc.*,&#13;
+org.springframework.remoting.jaxws.*,&#13;
+org.springframework.web.*</entry>
+<entry key="profiler.settings.istrument.getter.setter.methods">true</entry>
+<entry key="myeclipse.profiling.mode">0</entry>
+<entry key="ProfilerMemorySettings_stacktraces">-1</entry>
+<entry key="profiler.settings.sampling.interval">10</entry>
+<entry key="profiler.settings.cpu.profiling.type">0</entry>
+</properties>

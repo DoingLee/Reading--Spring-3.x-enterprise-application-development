@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- SQL方言，这边设定的是HSQL -->
+		<property name="dialect">org.hibernate.dialect.HSQLDialect</property>
+		<!-- 数据源的名称 -->
+		<property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
+		<property name="hibernate.connection.url">jdbc:hsqldb:data/sampledb</property>
+		<!--设置连接数据库的用户名-->
+		<property name="hibernate.connection.username">sa</property>
+		<!--设置连接数据库的密码-->
+		<property name="hibernate.connection.password"></property>
+		<!--设置显示sql语句方便调试-->
+		<property name="hibernate.show_sql">true</property>
+		<!-- 配置映射 -->
+		<property name="configurationClass">org.hibernate.cfg.AnnotationConfiguration</property>
+		<mapping class="com.baobaotao.domain.User" />
+		<mapping class="com.baobaotao.domain.LoginLog" />
+	 </session-factory>
+</hibernate-configuration>
+

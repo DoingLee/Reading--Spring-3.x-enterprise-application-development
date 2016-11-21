@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+编译worklog中的数据库连接
+-->
+<project basedir="." default="buildmain" name="baobaotao">
+
+	<property name="target.dir" value="${basedir}/bin" />
+	<property name="target.junit.reports.dir" value="${target.dir}/test-reports" />
+	<property name="target.testclasses.dir" value="${target.dir}/test-classes" />
+	<property name="target.classes.dir" value="${target.dir}/classes" />
+	<property name="test.dir" value="${basedir}/test" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="test.includes" value="**/*Test.class" />
+	<property name="test.excludes" value="**/Abstract*" />
+
+	<path id="all-libs">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="buildmain" description="Compile main source files">
+		<mkdir dir="${target.classes.dir}" />
+		<javac destdir="${target.classes.dir}" encoding="utf-8" deprecation="false" optimize="false" failonerror="true">
+			<src path="${src.dir}" />
+			<classpath refid="all-libs" />
+		</javac>
+		<copy todir="${target.classes.dir}" preservelastmodified="true">
+			<fileset dir="${src.dir}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="buildtests" depends="buildmain" description="Compile test source files">
+		<mkdir dir="${target.testclasses.dir}" />
+		<javac destdir="${target.testclasses.dir}" encoding="utf-8" debug="${debug}" deprecation="false" optimize="false" failonerror="true">
+			<src path="${test.dir}" />
+			<classpath refid="all-libs" />
+			<classpath location="${target.classes.dir}" />
+		</javac>
+		<copy todir="${target.testclasses.dir}" preservelastmodified="true">
+			<fileset dir="${test.dir}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="runtest"  depends="buildtests"  description="Run main tests" >
+		<mkdir dir="${target.junit.reports.dir}" />
+		<junit dir="${basedir}" forkmode="perBatch" printsummary="yes" haltonfailure="no" haltonerror="no" >
+			<jvmarg line="-Djava.awt.headless=true -Xmx256m -XX:MaxPermSize=128m" />
+			<classpath location="${target.testclasses.dir}" />
+			<classpath location="${target.classes.dir}" />
+			<classpath refid="all-libs" />
+			<formatter type="brief" usefile="false" />
+			<batchtest fork="yes" todir="${target.junit.reports.dir}" >
+				<fileset dir="${target.testclasses.dir}" includes="${test.includes}" excludes="${test.excludes}"  />
+			</batchtest>
+		</junit>
+	</target>
+</project>

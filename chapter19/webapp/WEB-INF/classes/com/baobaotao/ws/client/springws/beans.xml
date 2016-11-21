@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="bbtForumServiceClient" class="com.baobaotao.ws.client.springws.BbtForumServiceClient">
+		<!--<property name="serviceUris">
+			<list>
+				<value>http://www.aerlingus.com/ws/</value>
+				<value>http://www.csa.cz/gateway/</value>
+			</list>
+		</property>-->
+		<property name="webServiceTemplate" ref="wsTemplate"/>
+	</bean>
+	
+	<!--<bean id="airlineWsClient" class="net.javacrumbs.airline.aggregator.AirlineWsClient">
+		<property name="template" ref="wsTemplate"/>
+	</bean>-->
+	
+	 <bean id="wsTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+		<property name="marshaller" ref="marshaller"/>
+		<property name="unmarshaller" ref="marshaller"/>
+	</bean>	
+	
+	<bean id="marshaller" class="org.springframework.oxm.xmlbeans.XmlBeansMarshaller" />
+
+	
+	
+</beans>

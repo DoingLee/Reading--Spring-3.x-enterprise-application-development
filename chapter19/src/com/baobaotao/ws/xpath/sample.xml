@@ -1,0 +1,22 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+ <SOAP-ENV:Header>
+  <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" SOAP-ENV:mustUnderstand="1">
+   <wsu:Timestamp xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="XWSSGID-1294933019426-1489568038">
+    <wsu:Created>2011-01-13T15:42:00.516Z</wsu:Created>
+    <wsu:Expires>2011-01-13T15:47:00.516Z</wsu:Expires>
+   </wsu:Timestamp>
+   <wsse:UsernameToken xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="XWSSGID-12949330194261896507786" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+    <wsse:Username>mojo</wsse:Username>
+    <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">ZalI6+DTAFvlYM2h4DBg56rpyhY=</wsse:Password>
+    <wsse:Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">smqvjzTKmKJkQlrSCubs/ZSm</wsse:Nonce>
+    <wsu:Created xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">2011-01-13T15:42:00.521Z</wsu:Created>
+   </wsse:UsernameToken>
+  </wsse:Security>
+ </SOAP-ENV:Header>
+ <SOAP-ENV:Body>
+  <subscriptionResponse xmlns="http://krams915.blogspot.com/ws/schema/oss">
+   <code id="200">SUCCESS</code>
+   <description type="plain">User has been subscribed</description>
+  </subscriptionResponse>
+ </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

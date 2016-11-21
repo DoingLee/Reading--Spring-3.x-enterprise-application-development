@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="timerTask"
+		class="com.baobaotao.basic.timer.SimpleTimerTask" />
+	<bean id="scheduledTask"
+		class="org.springframework.scheduling.timer.ScheduledTimerTask">
+		<property name="delay" value="1000" />
+		<property name="period" value="1000" />
+		<property name="timerTask" ref="timerTask1" />
+	</bean>
+
+	<bean id="timer"
+		class="org.springframework.scheduling.timer.TimerFactoryBean">
+		<property name="scheduledTimerTasks">
+			<list>
+				<ref bean="scheduledTask" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="myService" class="com.baobaotao.service.MyService" />
+	<bean id="timerTask1"
+		class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
+		<property name="targetObject" ref="myService" />
+		<property name="targetMethod" value="doJob" />
+	</bean>
+	
+</beans>

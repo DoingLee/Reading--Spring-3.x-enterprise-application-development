@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="customEditors">
+			<map>
+				<entry key="com.baobaotao.editor.Car">
+					<bean class="com.baobaotao.editor.CustomCarEditor" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+    <bean id="boss" class="com.baobaotao.editor.Boss">
+       <property name="name" value="John"/>
+       <property name="car" value="红旗CA72,200,20000.00"/>
+    </bean>
+    
+</beans>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.baobaotao.com/ws/server/springws/schema/messages/v2"
+           xmlns:v2="http://www.baobaotao.com/ws/server/springws/schema/messages/v2"
+           xmlns:tns="http://www.baobaotao.com/ws/server/springws/schema/messages/v2"
+           elementFormDefault="qualified">
+    <element name="getRefinedTopicCountRequest">
+        <complexType>
+            <sequence>
+                <element ref="v2:topicType"/>
+                <element ref="v2:startDate"/>
+                <element ref="v2:endDate"/>
+            </sequence>
+        </complexType>
+    </element>
+    <element name="topicType" type="v2:topicDataType"/>
+    <element name="startDate" type="date"/>
+    <element name="endDate" type="date"/>
+    <simpleType name="topicDataType">
+        <restriction base="string">
+            <pattern value="[A-Z][0-9][0-9][0-9]"/>
+        </restriction>
+    </simpleType>
+    <element name="getRefinedTopicCountResponse">
+        <complexType>
+            <sequence>
+                <element name="result" type="int"/>
+            </sequence>
+        </complexType>
+    </element>
+</schema>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+         
+
+  <bean id="office" class="com.baobaotao.auto.Office"/>
+  <bean id="office1" class="com.baobaotao.auto.Office" autowire-candidate="false"/>
+  <bean id="boss" class="com.baobaotao.auto.Boss" autowire="constructor">
+     <constructor-arg index="0" value="John"/>
+  </bean>
+  
+   <bean id="car" class="com.baobaotao.auto.Car" scope="singleton">
+     <property name="brand" value="红旗CA72"/>
+     <property name="price" value="2000"/>
+  </bean> 
+  <bean id="magicBoss" class="com.baobaotao.auto.MagicBoss">
+    <lookup-method name="getCar" bean="car"/>
+  </bean>
+  
+</beans>

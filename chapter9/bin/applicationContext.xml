@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://www.springframework.org/schema/util 
+http://www.springframework.org/schema/util/spring-util-3.0.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+         ">
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:jdbc.properties" />
+	</bean>
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName"
+			value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+	<bean id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="forumDao" 
+		class="com.baobaotao.dao.jdbc.ForumJdbcDao" >
+       <property name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
+   <bean id="template" class="org.springframework.transaction.support.TransactionTemplate">
+       <property name="transactionManager" ref="txManager"></property>
+   </bean>
+   
+   <bean id="forumService1" class="com.baobaotao.service.ForumService1">
+       <property name="forumDao" ref="forumDao"/>
+       <property name="template" ref="template"/>
+    </bean>
+    
+
+
+	<tx:annotation-driven transaction-manager="txManager"/>
+	<!-- a PlatformTransactionManager is still required -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- (this dependency is defined somewhere else) -->
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="userService" class="com.baobaotao.service.UserService"/>
+    <bean id="forumService" class="com.baobaotao.service.ForumService">
+       <property name="userService" ref="userService"/>
+    </bean>
+	<!--
+		<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+		</bean>   
+		<bean id="bbtForum" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManager"/>
+		<property name="target" >
+		<bean class="com.baobaotao.service.EntityManagerBbtForum" autowire="autodetect"/>
+		</property>
+		<property name="transactionAttributes">
+		<props>
+		<prop key="*">PROPAGATION_REQUIRED</prop>
+		</props>
+		</property>
+		</bean>
+	-->
+
+</beans>

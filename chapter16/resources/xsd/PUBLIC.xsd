@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns="PUBLIC" targetNamespace="PUBLIC">
+	<xsd:element name="T_USER" type="T_USER__type" />
+	<xsd:element name="T_LOGIN_LOG" type="T_LOGIN_LOG__type" />
+	<xsd:element name="DBMAINTAIN_SCRIPTS" type="DBMAINTAIN_SCRIPTS__type" />
+	<xsd:complexType name="T_USER__type">
+		<xsd:attribute name="LAST_IP" use="optional" />
+		<xsd:attribute name="USER_ID" use="optional" />
+		<xsd:attribute name="CREDITS" use="optional" />
+		<xsd:attribute name="USER_NAME" use="optional" />
+		<xsd:attribute name="PASSWORD" use="optional" />
+		<xsd:attribute name="LAST_VISIT" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="T_LOGIN_LOG__type">
+		<xsd:attribute name="USER_ID" use="optional" />
+		<xsd:attribute name="IP" use="optional" />
+		<xsd:attribute name="LOGIN_LOG_ID" use="optional" />
+		<xsd:attribute name="LOGIN_DATETIME" use="optional" />
+	</xsd:complexType>
+	<xsd:complexType name="DBMAINTAIN_SCRIPTS__type">
+		<xsd:attribute name="FILE_NAME" use="optional" />
+		<xsd:attribute name="EXECUTED_AT" use="optional" />
+		<xsd:attribute name="VERSION" use="optional" />
+		<xsd:attribute name="SUCCEEDED" use="optional" />
+		<xsd:attribute name="CHECKSUM" use="optional" />
+		<xsd:attribute name="FILE_LAST_MODIFIED_AT" use="optional" />
+	</xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
+          p:brokerURL="tcp://localhost:61616"
+     />
+    <bean id="messageSender" class="org.springframework.ws.transport.jms.JmsMessageSender"
+          p:connectionFactory-ref="connectionFactory"
+    />
+    <bean id="bbtForumServiceClient" class="com.baobaotao.ws.client.jms.BbtForumServiceClient"
+          p:messageSender-ref="messageSender"
+
+           p:defaultUri="jms:RequestQueue"
+     />
+</beans>

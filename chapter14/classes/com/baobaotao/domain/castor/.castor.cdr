@@ -1,0 +1,4 @@
+#Sun Feb 13 23:15:18 CST 2011
+com.baobaotao.domain.castor.User=com.baobaotao.domain.castor.descriptors.UserDescriptor
+com.baobaotao.domain.castor.Logs=com.baobaotao.domain.castor.descriptors.LogsDescriptor
+com.baobaotao.domain.castor.LoginLog=com.baobaotao.domain.castor.descriptors.LoginLogDescriptor

@@ -1,0 +1,9 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+<SOAP-ENV:Header/>
+<SOAP-ENV:Body>
+    <getRefinedTopicCountResponse xmlns="http://www.baobaotao.com/ws/server/springws/schema/messages/v1">
+     88
+    </getRefinedTopicCountResponse>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+

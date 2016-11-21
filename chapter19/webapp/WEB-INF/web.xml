@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+	
+	<display-name>baobaotao'ws</display-name>
+	<!-- The context params that read by ContextLoaderListener  -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+          <param-value>
+            classpath:com/baobaotao/ws/server/springws/applicationContext.xml
+            classpath:com/baobaotao/ws/server/springws/springws-server-context.xml
+            classpath:com/baobaotao/ws/server/springws/applicationContext-jms.xml
+        </param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+    <!-- Spring services-->
+    <servlet>
+        <servlet-name>ws</servlet-name>
+        <servlet-class>org.springframework.ws.transport.http.MessageDispatcherServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ws</servlet-name>
+        <url-pattern>/service/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ws</servlet-name>
+        <url-pattern>*.wsdl</url-pattern>
+    </servlet-mapping>
+   
+</web-app>

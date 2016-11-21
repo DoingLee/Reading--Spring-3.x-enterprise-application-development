@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<tx:annotation-driven />
+	<bean id="userService"
+		class="com.baobaotao.service.UserServiceImpl">
+		<property name="userDao" ref="userDao" />
+		<property name="loginLogDao" ref="loginLogDao" />
+	</bean>
+	
+	<!--
+		<bean id="userServiceTarget"
+		class="com.baobaotao.service.UserServiceImpl">
+		<property name="userDao" ref="userDao" />
+		<property name="loginLogDao" ref="loginLogDao"></property>
+		</bean>
+		声明性事务 
+		<bean id="userService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="target" ref="userServiceTarget" />
+		<property name="transactionAttributes">
+		<props>
+		<prop key="findUserByUserName">
+		PROPAGATION_REQUIRED,readOnly
+		</prop>
+		<prop key="hasMatchUser">
+		PROPAGATION_REQUIRED,readOnly
+		</prop>
+		<prop key="loginSuccess">PROPAGATION_REQUIRED</prop>
+		</props>
+		</property>
+		</bean>
+		
+	-->
+</beans>

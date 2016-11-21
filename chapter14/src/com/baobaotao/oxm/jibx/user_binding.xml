@@ -1,0 +1,9 @@
+<binding xmlns:bf="http://www.baobaotao.com/forum/schemas" name="binding"
+	package="com.baobaotao.forum.schemas" trim-whitespace="true">
+	<namespace uri="http://www.baobaotao.com/forum/schemas" default="elements"
+		prefix="bf" />
+	<mapping  class="com.baobaotao.domain.User">
+		<value style="element" name="UserName" get-method="getUserName"
+			set-method="setUserName" />
+	</mapping>
+</binding>  

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:sws="http://www.springframework.org/schema/web-services"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+       http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services-2.0.xsd">
+    <sws:annotation-driven />
+    <sws:interceptors>
+        <!--
+         <bean id="validatingInterceptor"  class="org.springframework.ws.soap.server.endpoint.interceptor.PayloadValidatingInterceptor"
+				        p:schema="/WEB-INF/subscription.xsd"
+				        p:validateRequest="true"
+				        p:validateResponse="true"/>-->
+      <!--  <bean class="org.springframework.ws.server.endpoint.interceptor.PayloadLoggingInterceptor"/>-->
+        <!--
+        <bean class="org.springframework.ws.soap.server.endpoint.interceptor.PayloadValidatingInterceptor">
+            <property name="xsdSchemaCollection" ref="forumSchemaCollectionV1"/>
+            <property name="validateRequest" value="true"/>
+            <property name="validateResponse" value="true"/>
+        </bean>-->
+ <!--       <bean class="org.springframework.ws.soap.server.endpoint.interceptor.PayloadValidatingInterceptor">
+            <property name="xsdSchemaCollection" ref="forumSchemaCollectionV2"/>
+            <property name="validateRequest" value="false"/>
+            <property name="validateResponse" value="false"/>
+        </bean>-->
+
+         <!-- 1. 用户授权 -->
+     <!--   <sws:payloadRoot localPart="getRefinedTopicCountRequest" namespaceUri="http://www.baobaotao.com/ws/server/springws/schema/messages/v2">
+            <bean class="org.springframework.ws.soap.security.xwss.XwsSecurityInterceptor">
+                <property name="secureResponse" value="false"/>
+                <property name="policyConfiguration"
+                          value="classpath:com/baobaotao/ws/server/springws/security/securityPolicy.xml"/>
+                <property name="callbackHandler">
+                    <bean class="org.springframework.ws.soap.security.xwss.callback.SpringDigestPasswordValidationCallbackHandler">
+                        <property name="userDetailsService" ref="securityService"/>
+                    </bean>
+                </property>
+            </bean>
+        </sws:payloadRoot>-->
+        <!-- 2. 数字签名 -->
+        <!--
+        <sws:payloadRoot  localPart="getRefinedTopicCountRequest" namespaceUri="http://www.baobaotao.com/ws/server/springws/schema/messages/v2">
+            <bean id="serverSecurityInterceptor"	class="org.springframework.ws.soap.security.wss4j.Wss4jSecurityInterceptor">
+                <property name="validationActions" value="Signature"/>
+                <property name="validationSignatureCrypto" ref="serverCrypto"/>
+                <property name="validationCallbackHandler">
+                    <bean class="org.springframework.ws.soap.security.wss4j.callback.KeyStoreCallbackHandler">
+                        <property name="keyStore">
+                            <bean class="org.springframework.ws.soap.security.support.KeyStoreFactoryBean">
+                                <property name="password" value="serverpass"/>
+                            </bean>
+                        </property>
+                        <property name="privateKeyPassword" value="serverpass"/>
+                    </bean>
+                </property>
+            </bean>
+        </sws:payloadRoot>
+        -->
+
+        <!--3. 报文加密 -->
+   <!--     <sws:payloadRoot localPart="getRefinedTopicCountRequest"
+                         namespaceUri="http://www.baobaotao.com/ws/server/springws/schema/messages/v2">
+            <bean id="serverSecurityInterceptor"
+                  class="org.springframework.ws.soap.security.wss4j.Wss4jSecurityInterceptor">
+                <property name="validationActions" value="Encrypt"/>
+                <property name="validationDecryptionCrypto" ref="serverCrypto"/>
+                <property name="validationCallbackHandler">
+                    <bean class="org.springframework.ws.soap.security.wss4j.callback.KeyStoreCallbackHandler">
+                        <property name="keyStore">
+                            <bean class="org.springframework.ws.soap.security.support.KeyStoreFactoryBean">
+                                <property name="password" value="serverpass"/>
+                            </bean>
+                        </property>
+                        <property name="privateKeyPassword" value="serverpass"/>
+                    </bean>
+                </property>
+            </bean>
+        </sws:payloadRoot>
+-->
+
+        <!-- 4. 数字签名+报文加密 -->
+        <sws:payloadRoot  localPart="getRefinedTopicCountRequest" namespaceUri="http://www.baobaotao.com/ws/server/springws/schema/messages/v2">
+            <bean id="serverSecurityInterceptor"	class="org.springframework.ws.soap.security.wss4j.Wss4jSecurityInterceptor">
+
+                <property name="validationActions" value="Timestamp Signature Encrypt"/>
+                <property name="validationSignatureCrypto" ref="serverCrypto"/>
+                <property name="validationDecryptionCrypto" ref="serverCrypto"/>
+                <property name="validationCallbackHandler">
+                    <bean class="org.springframework.ws.soap.security.wss4j.callback.KeyStoreCallbackHandler">
+                        <property name="keyStore">
+                            <bean class="org.springframework.ws.soap.security.support.KeyStoreFactoryBean">
+                                <property name="password" value="serverpass"/>
+                            </bean>
+                        </property>
+                        <property name="privateKeyPassword" value="serverpass"/>
+                    </bean>
+                </property>
+                <property name="securementEncryptionUser" value="client"/>
+                <property name="securementActions" value="Timestamp Signature Encrypt" />
+                <property name="securementUsername" value="server" />
+                <property name="securementPassword" value="serverpass" />
+                <property name="securementSignatureCrypto" ref="serverCrypto"/>
+                <property name="securementEncryptionCrypto" ref="serverCrypto"/>
+                <property name="securementEncryptionParts" value="{}{http://www.baobaotao.com/ws/server/springws/schema/messages/v2}result"/>
+            </bean>
+        </sws:payloadRoot>
+    </sws:interceptors>
+    <bean id="serverCrypto" class="org.springframework.ws.soap.security.wss4j.support.CryptoFactoryBean">
+	    <property name="keyStorePassword" value="storepass"/>
+	    <property name="keyStoreLocation" value="classpath:META-INF/springws/serverStore.jks"/>
+	</bean>
+
+    <!-- spring-WS 1.5声明方法，在spring-WS2.0 中已作废-->
+    <!--
+    <bean
+		class="org.springframework.ws.server.endpoint.adapter.GenericMarshallingMethodEndpointAdapter>
+     	<constructor-arg>
+			<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+				<property name="contextPath" value="com.baobaotao.ws.server.springws.schema.v2" />
+			</bean>
+		</constructor-arg>
+	</bean>
+	-->
+    <bean
+		class="org.springframework.ws.server.endpoint.adapter.DefaultMethodEndpointAdapter" />
+    <context:component-scan base-package="com.baobaotao.ws.server.springws.ws"/>
+    <bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory"/>
+    <bean id="messageReceiver" class="org.springframework.ws.soap.server.SoapMessageDispatcher"/>
+
+    <!--授权认证-->
+    <security:global-method-security secured-annotations="enabled"/>
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="securityService"/>
+    </security:authentication-manager>
+    <bean id="securityService"
+          class="com.baobaotao.ws.server.springws.security.ForumUserDetailsService">
+    </bean>
+</beans>

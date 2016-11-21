@@ -1,0 +1,6 @@
+#Mon Sep 19 22:35:23 CST 2011
+eclipse.preferences.version=1
+encoding//schema/sampledb.sql=GBK
+encoding//src/test/java/com/baobaotao/test/dataset/excel/MultiSchemaXlsDataSetReader.java=GBK
+encoding//src/test/java/com/baobaotao/test/dataset/util/XlsDataSetBeanFactory.java=UTF-8
+encoding/<project>=UTF-8

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:p="http://www.springframework.org/schema/p"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <import resource="message-sender.xml" />
+    <!--理解SaajSoapMessageFactory工厂类的作用-->
+    <bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory"/>
+
+    <bean id="abstractClient" abstract="true">
+    <constructor-arg ref="messageFactory"/>
+    <property name="defaultUri" value="http://localhost:8088/baobaotao/service"/>
+    </bean>
+
+
+   <!--
+     <bean id="jaxb2marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="contextPath" value="net.javacrumbs.calc.model" />
+	</bean>
+
+	-->
+
+     <bean id="marshaller" class="org.springframework.oxm.xmlbeans.XmlBeansMarshaller"/>
+     <bean id="bbtForumServiceClient" class="com.baobaotao.ws.client.springws.BbtForumServiceClient"
+        p:webServiceTemplate-ref="webServiceTemplate"
+      />
+      <bean id="webServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate"
+             p:defaultUri="http://localhost:8088/baobaotao/service/"
+             p:messageSender-ref="messageSender"
+             p:marshaller-ref="marshaller"
+             p:unmarshaller-ref="marshaller"
+       />
+
+    <bean id="bbtForumServiceGatewayClient"
+     class="com.baobaotao.ws.client.springws.BbtForumServiceGatewayClient"
+     p:webServiceTemplate-ref="webServiceTemplate"
+     p:marshaller-ref="marshaller" p:unmarshaller-ref="marshaller" />
+
+    <!-- <bean id="bbtForumServiceGatewayClient"
+     class="com.baobaotao.ws.client.springws.BbtForumServiceGatewayClient"
+     p:defaultUri="http://localhost:8088/baobaotao/service/"
+     p:marshaller-ref="marshaller" p:unmarshaller-ref="marshaller" />-->
+
+
+
+
+
+
+    <bean id="bbtForumServiceEncClient" class="com.baobaotao.ws.client.springws.BbtForumServiceEncClient">
+		<property name="webServiceTemplate" ref="webServiceTemplateEnc"/>
+	</bean>
+
+    <bean id="webServiceTemplateEnc" class="org.springframework.ws.client.core.WebServiceTemplate">
+        <property name="defaultUri" value="http://localhost:8088/baobaotao/service/"/>
+        <property name="interceptors">
+            <list>
+               <!-- <ref local="securityInterceptor1"/>-->
+               <!-- <ref local="securityInterceptor2"/>-->
+                <!-- <ref local="securityInterceptor3"/>-->
+                 <ref local="securityInterceptor4"/>
+            </list>
+        </property>
+        <!-- Defined in separate file -->
+        <property name="messageSender" ref="messageSender"/>
+        <property name="marshaller" ref="marshaller2"/>
+        <property name="unmarshaller" ref="marshaller2"/>
+    </bean>
+    <!-- p:interceptors-ref="securityInterceptor1"-->
+     <bean id="marshaller2" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<property name="contextPath" value="com.baobaotao.ws.server.springws.schema.v2" />
+	</bean>
+    <!--1. 用户授权-->
+    <bean id="securityInterceptor1" class="org.springframework.ws.soap.security.wss4j.Wss4jSecurityInterceptor">
+    <property name="securementActions" value="UsernameToken"/>
+    <property name="securementUsername" value="john"/>
+    <property name="securementPassword" value="123456"/>
+    </bean>
+
+     <!--2. 数字签名-->
+	<bean id="securityInterceptor2"
+		class="org.springframework.ws.soap.security.wss4j.Wss4jSecurityInterceptor">
+		<property name="securementActions" value="Signature" />
+        <property name="securementUsername" value="client" />
+		<property name="securementPassword" value="clientpass" />
+		<property name="securementSignatureCrypto" ref="clientCrypto"/>
+	</bean>
+
+     <!--3. SOAP报文加密-->
+    <bean id="securityInterceptor3"
+		class="org.springframework.ws.soap.security.wss4j.Wss4jSecurityInterceptor">
+		<property name="securementActions" value="Encrypt" />
+        <property name="securementUsername" value="client" />
+		<property name="securementPassword" value="clientpass" />
+		<property name="securementEncryptionCrypto" ref="clientCrypto"/>
+		<property name="securementEncryptionParts" value="{Content}{http://www.baobaotao.com/ws/server/springws/schema/messages/v2}topicType"/>
+	    <property name="securementEncryptionUser" value="server"/>
+    </bean>
+
+     <!--4. 数字签名+SOAP报文加密（请求报文和响应报文）-->
+    <bean id="securityInterceptor4"
+		class="org.springframework.ws.soap.security.wss4j.Wss4jSecurityInterceptor">
+		<property name="securementActions" value="Timestamp Signature Encrypt" />
+		<property name="securementUsername" value="client" />
+		<property name="securementPassword" value="clientpass" />
+		<property name="securementSignatureCrypto" ref="clientCrypto"/>
+		<property name="securementEncryptionCrypto" ref="clientCrypto"/>
+		<property name="securementEncryptionParts" value="{Content}{http://www.baobaotao.com/ws/server/springws/schema/messages/v2}topicType"/>
+		<property name="securementEncryptionUser" value="server"/>
+
+        <property name="validationActions" value="Timestamp Signature Encrypt"/>
+        <property name="validationSignatureCrypto" ref="clientCrypto"/>
+        <property name="validationDecryptionCrypto" ref="clientCrypto"/>
+        <property name="validationCallbackHandler">
+            <bean class="org.springframework.ws.soap.security.wss4j.callback.KeyStoreCallbackHandler">
+                <property name="keyStore">
+                    <bean class="org.springframework.ws.soap.security.support.KeyStoreFactoryBean">
+                        <property name="password" value="clientpass"/>
+                    </bean>
+                </property>
+                <property name="privateKeyPassword" value="clientpass"/>
+            </bean>
+        </property>
+	</bean>
+
+
+	<bean id="clientCrypto" class="org.springframework.ws.soap.security.wss4j.support.CryptoFactoryBean">
+	    <property name="keyStorePassword" value="storepass"/>
+	    <property name="keyStoreLocation" value="classpath:META-INF/springws/clientStore.jks"/>
+	</bean>
+
+</beans>
+
+

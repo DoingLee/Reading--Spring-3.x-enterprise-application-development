@@ -1,0 +1,4 @@
+<forum:getRefinedTopicCountRequest xmlns:forum="http://www.baobaotao.com/ws/server/springws/schema/messages/v1">
+    <forum:startDate>2011-05-01</forum:startDate>
+    <forum:endDate>2011-05-31</forum:endDate>
+</forum:getRefinedTopicCountRequest>

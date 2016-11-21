@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:jdbc.properties" />
+	</bean>
+
+	<!-- 配置数据源  -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName"
+			value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<bean id="nativeJdbcExtractor"
+		class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor"
+		lazy-init="true" />
+
+	<!-- LobHandler for Oracle JDBC drivers -->
+	<!-- (refers to the NativeJdbcExtractor above to get access to native OracleConnections) -->
+	<bean id="oracleLobHandler"
+		class="org.springframework.jdbc.support.lob.OracleLobHandler"
+		lazy-init="true">
+		<property name="nativeJdbcExtractor" ref="nativeJdbcExtractor" />
+	</bean>
+
+	<!-- LobHandler for well-behaved JDBC drivers -->
+	<!-- (simply delegating to corresponding PreparedStatement and ResultSet methods) -->
+	<bean id="defaultLobHandler"
+		class="org.springframework.jdbc.support.lob.DefaultLobHandler"
+		lazy-init="true" />
+
+	<bean id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+		<property name="nativeJdbcExtractor" ref="nativeJdbcExtractor" />
+	</bean>
+
+	<bean id="dao" abstract="true">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	<bean id="forumDao" parent="dao"
+		class="com.baobaotao.dao.jdbc.ForumJdbcDao" />
+	<bean id="topicDao" parent="dao"
+		class="com.baobaotao.dao.jdbc.TopicJdbcDao" />
+	<!-- 通过Oracle序列获取主键值 
+		<bean id="incre" class="org.springframework.jdbc.support.incrementer.OracleSequenceMaxValueIncrementer">
+		<property name="incrementerName" value="seq_post_id"/>
+		<property name="dataSource" ref="dataSource"/>
+		</bean>
+	-->
+
+	<!-- 在Mysql中，通过表产生主键值-->
+	<bean id="incre"
+		class="org.springframework.jdbc.support.incrementer.MySQLMaxValueIncrementer">
+		<property name="incrementerName" value="t_post_id" />
+		<property name="columnName" value="sequence_id" />
+		<property name="cacheSize" value="10" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="postDao" parent="dao"
+		class="com.baobaotao.dao.jdbc.PostJdbcDao">
+		<property name="lobHandler" ref="defaultLobHandler" />
+		<property name="incre" ref="incre" />
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="bbtForum"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="target">
+			<bean class="com.baobaotao.service.JdbcBbtForum">
+			    <property name="forumDao" ref="forumDao"/>
+			</bean>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>

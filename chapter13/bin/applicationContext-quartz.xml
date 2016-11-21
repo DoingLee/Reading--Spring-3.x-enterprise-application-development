@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+         http://www.springframework.org/schema/util 
+http://www.springframework.org/schema/util/spring-util-2.0.xsd
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+         ">
+	<!-- 通过JobDetailBean实现 -->
+	<bean name="jobDetail"
+		class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="com.baobaotao.quartz.MyJob" />
+
+		<property name="applicationContextJobDataKey"
+			value="applicationContext" />
+	</bean>
+
+	<!-- 通过封装服务类方法实现 -->
+	<bean id="jobDetail_1"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="myService" />
+		<property name="targetMethod" value="doJob" />
+	</bean>
+	<bean id="myService" class="com.baobaotao.service.MyService" />
+
+	<!-- 通过封装Runnable类实现 -->
+	<bean id="job"
+		class="org.springframework.scheduling.quartz.DelegatingJob">
+		<constructor-arg ref="otherJob" />
+	</bean>
+	<bean id="otherJob" class="com.baobaotao.service.OtherJob" />
+	<bean name="jobDetail_2"
+		class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="com.baobaotao.quartz.MyJob" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="size" value="10" />
+			</map>
+		</property>
+		<property name="applicationContextJobDataKey"
+			value="applicationContext" />
+	</bean>
+
+	<bean id="simpleTrigger"
+		class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="jobDetail" />
+		<property name="startDelay" value="1000" />
+		<property name="repeatInterval" value="2000" />
+		<property name="repeatCount" value="100" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="count" value="10" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="scheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="simpleTrigger" />
+			</list>
+		</property>
+		<property name="schedulerContextAsMap">
+			<map>
+				<entry key="timeout" value="30" />
+			</map>
+		</property>
+		<property name="quartzProperties">
+			<props>
+				<prop key="org.quartz.threadPool.class">
+					org.quartz.simpl.SimpleThreadPool
+				</prop>
+				<prop key="org.quartz.threadPool.threadCount">10</prop>
+			</props>
+		</property>
+	</bean>
+</beans>

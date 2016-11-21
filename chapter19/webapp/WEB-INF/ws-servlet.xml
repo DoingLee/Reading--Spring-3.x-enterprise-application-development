@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <!-- ===================== WSDL 定义    ============================== -->
+    <bean id="BbtForumService" class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition">
+        <!--<bean id="BbtForumService" class="org.springframework.ws.wsdl.wsdl11.DynamicWsdl11Definition">在Spring2.0之后作废-->
+        <description></description>
+        <property name="schemaCollection">
+            <bean id="forumSchemaCollection" class="org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection">
+                <property name="xsds">
+                    <list>
+                        <value>/resources/v1/forum_messages.xsd</value>
+                    </list>
+                </property>
+                <property name="inline" value="true"/>
+            </bean>
+        </property>
+        <property name="schema">
+            <bean class="org.springframework.xml.xsd.SimpleXsdSchema">
+                <property name="xsd"
+                          value="/resources/v1/forum_messages.xsd"/>
+            </bean>
+        </property>
+        <property name="portTypeName" value="BbtForumServicePortType"/>
+        <property name="locationUri" value="http://localhost:8080/baobaotao/service"/>
+        <property name="targetNamespace"
+                  value="http://www.baobaotao.com/ws/springws/server/definitions"/>
+    </bean>
+
+    <bean id="BbtForumServiceV2" class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition">
+        <property name="schemaCollection">
+            <bean id="forumSchemaCollectionV2" class="org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection">
+                <property name="xsds">
+                    <list>
+                        <value>/resources/v2/forum_messages.xsd</value>
+                    </list>
+                </property>
+                <property name="inline" value="true"/>
+            </bean>
+        </property>
+        <property name="portTypeName" value="BbtForumServicePortType"/>
+        <property name="locationUri" value="http://localhost:8080/baobaotao/service/"/>
+        <property name="targetNamespace"
+                  value="http://www.baobaotao.com/ws/springws/server/definitions"/>
+    </bean>
+
+</beans>
